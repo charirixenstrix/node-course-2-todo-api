@@ -39,3 +39,4 @@ newTodo.save().then((doc)=>{
 }, (e)=>{
   console.log('Nem sikerült menteni');
 });*/
+module.exports={app};
