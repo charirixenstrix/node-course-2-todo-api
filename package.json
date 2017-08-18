@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha server/**/*.test.js",
+    "start":"node server/server.js",
     "test-watch": "nodemon --exec 'npm test'"
+  },
+  "engines":{
+    "node": "8.4.0"
   },
   "author": "Chari",
   "license": "ISC",
