@@ -1,5 +1,6 @@
-var express=require('express');
-var bodyParser=require('body-parser');
+const _=require('lodash');
+const express=require('express');
+const bodyParser=require('body-parser');
 const {ObjectID}=require('mongodb');
 
 var {mongoose}=require('./db/mongoose');
@@ -60,6 +61,32 @@ app.delete('/todos/:id', (req, res)=>{
   }).catch((e)=>{
     return res.status(404).send({uzi: 'Hiba történt a lekérdezésben'});
   });
+});
+
+app.patch('/todos/:id', (req, res)=>{
+  var id=req.params.id;
+  if(!ObjectID.isValid(id)){
+    return res.status(404).send({uzi: 'Hibás id!'});
+  }
+  var body =_.pick(req.body, ['text', 'completed']);
+
+  if(_.isBoolean(body.completed) && body.completed){
+    body.completedAt=new Date().getTime();
+  }
+  else{
+    body.completed=false;
+    body.completedAt=null;
+  }
+
+  Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo)=>{
+    if(!todo){
+      return res.status(404).send({uzi: 'Nincs adat'});
+    }
+    res.send({uzi: 'ok', todo});
+  }).catch((e)=>{
+    res.status(404).send();
+  });
+
 });
 
 app.listen(port, ()=>{
