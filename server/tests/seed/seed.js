@@ -16,16 +16,21 @@ const users=[{
 }, {
   _id: userTwoId,
   email: 'jen@example.com',
-  password: 'dragon1'
+  password: 'dragon1',
+  tokens: [{
+    access: 'auth',
+    token: jwt.sign({_id: userTwoId, access: 'auth'}, 'abc123').toString()
+  }]
 }];
 
 const todos=[{
   _id: new ObjectID(),
   text: 'First test',
   completed: true,
-  completedAt: 1234
-}, {_id: new ObjectID(), text: 'Second test'},
-{_id: new ObjectID(), text: 'Third test'}];
+  completedAt: 1234,
+  _creator: userOneId
+}, {_id: new ObjectID(), text: 'Second test', _creator: userTwoId},
+{_id: new ObjectID(), text: 'Third test', _creator: userOneId}];
 
 const populateTodos=(done)=>{
   Todo.remove({}).then(()=>{
